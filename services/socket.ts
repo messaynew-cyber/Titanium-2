@@ -10,19 +10,26 @@ class SocketService {
   private attempts: number = 0;
   
   private getUrl(): string {
-    // 1. If explicitly set in environment
+    let url = '';
+
+    // 1. Check environment variable
     if (import.meta.env?.VITE_WS_URL) {
-      return import.meta.env.VITE_WS_URL;
+      url = import.meta.env.VITE_WS_URL;
+    } else {
+      // 2. Dynamic Detection
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      url = `${protocol}//${host}/ws`;
     }
 
-    // 2. Dynamic Protocol & Host Detection
-    // CRITICAL FIX: Ensure WSS is used when page is HTTPS to prevent "Mixed Content" security errors.
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    
-    // In production (Docker), the backend serves the frontend, so relative path /ws works.
-    // In dev, Vite proxies /ws to the backend.
-    return `${protocol}//${host}/ws`;
+    // 3. CRITICAL SECURITY FIX: Force WSS if page is loaded over HTTPS
+    // This prevents "Mixed Content" errors if VITE_WS_URL was set to ws://
+    if (window.location.protocol === 'https:' && url.startsWith('ws:')) {
+      console.warn('Security Upgrade: Converting insecure ws:// to wss://');
+      url = url.replace('ws:', 'wss:');
+    }
+
+    return url;
   }
 
   connect() {
@@ -60,7 +67,7 @@ class SocketService {
       };
 
       this.ws.onerror = (event) => {
-        console.warn('Titanium Uplink Connection Error. Check console for Mixed Content details.');
+        console.warn('Titanium Uplink Connection Error. Check console for details.');
       };
     } catch (e) {
       console.error('Connection failed', e);
