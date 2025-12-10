@@ -1,11 +1,47 @@
-<div align="center">
+# TITANIUM v12.0
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Institutional Trading Terminal
 
-  <h1>Built with AI Studio</h2>
+## Quick Start for Beginners
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+### 1. Initialize Git (First Time Only)
+If you have not set up the version history yet, do this first:
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+**How to open the Terminal (CMD):**
+1. Open this folder in File Explorer.
+2. Click the address bar at the top.
+3. Type `cmd` and hit **Enter**.
 
-</div>
+**Run these commands:**
+```bash
+git init
+git add .
+git commit -m "Initial setup"
+```
+
+### 2. Start Backend (The Engine)
+This handles the math and data simulation.
+
+```bash
+cd backend
+# If you don't have these installed yet, just try running the python command
+pip install -r requirements.txt
+python main.py
+```
+*Keep this window open!*
+
+### 3. Start Frontend (The App)
+Open a **new** terminal window (repeat the CMD step above), then run:
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+## Troubleshooting
+- **'git' is not recognized**: Download and install [Git for Windows](https://git-scm.com/download/win).
+- **'npm' is not recognized**: Download and install [Node.js](https://nodejs.org/).
+- **'python' is not recognized**: Download and install [Python](https://www.python.org/).
+- **WS Connection Error**: Ensure the backend window is still running and didn't close.
